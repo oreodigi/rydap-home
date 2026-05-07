@@ -1,0 +1,18 @@
+<svg width="520" height="760" viewBox="0 0 520 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="88" y="24" width="344" height="700" rx="58" fill="#101312"/>
+  <rect x="120" y="58" width="280" height="632" rx="38" fill="#F9FBFA"/>
+  <path d="M120 96C120 75 137 58 158 58H362C383 58 400 75 400 96V300H120V96Z" fill="#00624F"/>
+  <rect x="213" y="68" width="94" height="18" rx="9" fill="#101312"/>
+  <text x="146" y="126" fill="white" font-family="Arial" font-size="30" font-weight="900">RYDAP</text>
+  <rect x="145" y="220" width="230" height="96" rx="18" fill="#0A7B64"/>
+  <text x="164" y="261" fill="white" font-family="Arial" font-size="16" font-weight="800">CAR FOR</text>
+  <text x="164" y="291" fill="#FFC928" font-family="Arial" font-size="38" font-weight="900">RENT</text>
+  <rect x="145" y="350" width="230" height="58" rx="16" fill="white" stroke="#E4EAE7"/>
+  <text x="192" y="386" fill="#1A2420" font-family="Arial" font-size="20" font-weight="800">Where next?</text>
+  <g transform="translate(140 520)">
+    <rect width="58" height="58" rx="18" fill="#EAF6F1"/><circle cx="29" cy="29" r="14" fill="#00846A"/>
+    <rect x="72" width="58" height="58" rx="18" fill="#EAF6F1"/><rect x="91" y="18" width="20" height="20" fill="#00846A"/>
+    <rect x="144" width="58" height="58" rx="18" fill="#EAF6F1"/><rect x="160" y="22" width="28" height="16" rx="4" fill="#00846A"/>
+    <rect x="216" width="58" height="58" rx="18" fill="#EAF6F1"/><path d="M232 38H258V24H248L242 14L236 24H232V38Z" fill="#00846A"/>
+  </g>
+</svg>
