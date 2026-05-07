@@ -1,18 +1,11 @@
 {
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
+  "installCommand": "corepack pnpm@10 install --frozen-lockfile",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "dist",
   "routes": [
     {
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "buildCommand": "pnpm build"
+  ]
 }
