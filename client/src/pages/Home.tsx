@@ -1,607 +1,671 @@
-import { appLinks } from "@/lib/appLinks";
-import { services } from "@/data/services";
-import type { LucideIcon } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import {
-  Ambulance,
   ArrowRight,
+  BadgeCheck,
   Bike,
-  Boxes,
-  Building2,
   Car,
-  Check,
+  CheckCircle2,
   ChevronDown,
   Clock3,
-  Crown,
   Download,
   Facebook,
   Headphones,
-  Home as HomeIcon,
   Instagram,
+  LifeBuoy,
   MapPin,
   Menu,
   Navigation,
   Package,
+  Phone,
+  Route,
   ShieldCheck,
+  Smartphone,
   Star,
   Truck,
-  User,
   Wallet,
 } from "lucide-react";
 
-import appScreenHome from "@/images/generated/app-screen-home.png";
-import appScreenMap from "@/images/generated/app-screen-map.png";
-import citySkyline from "@/images/generated/city-skyline-green.png";
-import heroAuto from "@/images/generated/hero-auto-rickshaw.png";
-import heroCab from "@/images/generated/hero-cab.png";
-import heroPhone from "@/images/generated/hero-phone-mockup.png";
-import qrPlaceholder from "@/images/generated/qr-placeholder.png";
-import routeLines from "@/images/generated/route-lines.png";
+import { appLinks } from "@/lib/appLinks";
 import appStoreBadge from "@/images/generated/app store.png";
 import googlePlayBadge from "@/images/generated/google play.png";
 import logoLight from "@/images/web lite logo.png";
 
-const navItems = ["Home", "Services", "How It Works", "For Partners", "Safety", "FAQ", "Contact"];
+const asset = (file: string) => `/assets/rydap/placeholders/${file}`;
 
-const trustItems = ["Pune-based brand", "Maharashtra-operated", "Verified partners", "Live tracking", "24/7 support"];
-
-const localTrust = [
-  {
-    title: "Homegrown in Pune",
-    text: "Pune city ke daily rides, parcels ani moving needs samjun RYDAP build kela aahe.",
-    image: heroAuto,
-  },
-  {
-    title: "Maharashtra-based company",
-    text: "Local market, local routes, local support - aaplya Maharashtra sathi focused platform.",
-    image: heroCab,
-  },
-  {
-    title: "Marathi-operated service",
-    text: "Brand operation Marathi-rooted team kadun, with clean tech experience for local users.",
-    image: heroPhone,
-  },
-  {
-    title: "Verified local partners",
-    text: "Driver, delivery, moving ani ambulance partners local accountability sobat onboard hotat.",
-    image: appScreenMap,
-  },
-  {
-    title: "Built for local mobility needs",
-    text: "Ride, parcel, moving ani emergency support ekach app madhye manage kara.",
-    image: citySkyline,
-  },
+const navItems = [
+  { label: "Home", href: "#home" },
+  { label: "Services", href: "#services" },
+  { label: "Why RYDAP", href: "#why-rydap" },
+  { label: "Drivers", href: "#drivers" },
+  { label: "Safety", href: "#safety" },
+  { label: "FAQ", href: "#faq" },
 ];
 
-const whyItems = [
-  { title: "Pune-focused Service", text: "Local mobility needs samjun built.", icon: MapPin },
-  { title: "Maharashtra-rooted", text: "Aaplya Maharashtra sathi local brand.", icon: Building2 },
-  { title: "Marathi-operated Support", text: "Local seva, fast support, smart app.", icon: Headphones },
-  { title: "Verified Partners", text: "Drivers ani service partners verified.", icon: ShieldCheck },
-  { title: "Live Tracking", text: "Trips, parcels ani updates app madhye.", icon: Navigation },
-  { title: "Multiple Services", text: "Rides, delivery, moving ani emergency.", icon: Boxes },
-  { title: "Affordable Local Pricing", text: "Daily city use sathi practical pricing.", icon: Wallet },
-  { title: "24/7 Support", text: "Support-first approach for local users.", icon: Clock3 },
-];
-
-const steps = [
-  { title: "App Download Kara", text: "Customer app install kara ani account setup kara.", icon: Download },
-  { title: "Service Choose Kara", text: "Ride, parcel, moving kiwa ambulance option select kara.", icon: MapPin },
-  { title: "Track & Manage Kara", text: "Partner info, live tracking ani updates app madhye bagha.", icon: Navigation },
-];
-
-const appFeatures = [
-  "Booking sirf mobile app madhun hoti hai",
-  "Service selection, live tracking ani support app madhye",
-  "Rides, parcels, moving aur emergency support",
-  "Google Play / App Store availability as per release status",
-];
-
-const partners = [
+const services = [
   {
-    title: "Drive With Us",
-    text: "Bike, auto kiwa cab driver mhanun join kara.",
-    icon: Car,
-    cta: "Join as Driver",
+    title: "Bike Taxi",
+    copy: "Fast daily commute",
+    image: asset("service-bike-taxi.png"),
+    icon: Bike,
   },
   {
-    title: "Deliver With Us",
-    text: "Parcel delivery partner banke local deliveries handle kara.",
-    icon: Package,
-    cta: "Join as Delivery Partner",
-  },
-  {
-    title: "Move With Us",
-    text: "Moving vehicle kiwa packers support team sobat join kara.",
+    title: "Auto Rickshaw",
+    copy: "Local Pune rides",
+    image: asset("service-auto.png"),
     icon: Truck,
-    cta: "Join as Moving Partner",
+    featured: true,
   },
   {
-    title: "Ambulance Partner",
-    text: "Emergency support network cha part bana.",
-    icon: Ambulance,
-    cta: "Join as Partner",
+    title: "Cab",
+    copy: "Comfortable city travel",
+    image: asset("service-cab.png"),
+    icon: Car,
   },
+  {
+    title: "Rentals",
+    copy: "Hourly ride convenience",
+    image: asset("service-rental.png"),
+    icon: Clock3,
+  },
+  {
+    title: "Delivery",
+    copy: "Local parcel movement",
+    image: asset("service-delivery.png"),
+    icon: Package,
+  },
+  {
+    title: "Outstation",
+    copy: "Maharashtra travel made easy",
+    image: asset("service-outstation.png"),
+    icon: Route,
+  },
+];
+
+const whyCards = [
+  { title: "Maharashtra-based", text: "Local brand, local operations, Pune-first growth.", icon: MapPin },
+  { title: "Verified Drivers", text: "Partner onboarding with documents and local accountability.", icon: BadgeCheck },
+  { title: "Transparent Pricing", text: "Clear app-led ride details before every trip.", icon: Wallet },
+  { title: "Live Tracking", text: "Trip status, driver info and updates inside the app.", icon: Navigation },
+  { title: "Ride History", text: "Past rides, support and service records app madhye.", icon: Smartphone },
+  { title: "Local Support", text: "Marathi/Hinglish friendly support for daily users.", icon: Headphones },
+];
+
+const downloadBullets = ["Quick booking", "Live tracking", "Safe local rides"];
+
+const driverSteps = [
+  { title: "Register", text: "Basic details submit kara.", icon: Phone },
+  { title: "Verify Documents", text: "License, vehicle ani KYC check.", icon: ShieldCheck },
+  { title: "Start Earning", text: "Approved zala ki rides accept kara.", icon: Wallet },
+];
+
+const areas = [
+  "Pune",
+  "Pimpri-Chinchwad",
+  "Baner",
+  "Wakad",
+  "Hinjewadi",
+  "Kothrud",
+  "Hadapsar",
+  "Viman Nagar",
+  "Shivajinagar",
+  "Maharashtra expansion coming soon",
 ];
 
 const safetyItems = [
-  "Verified drivers & partners",
-  "Live trip tracking",
-  "Emergency support",
-  "Transparent service details",
-  "Customer support",
-  "Local accountability",
+  { title: "Verified drivers", icon: BadgeCheck },
+  { title: "Ride tracking", icon: Navigation },
+  { title: "Emergency support", icon: LifeBuoy },
+  { title: "Transparent details", icon: CheckCircle2 },
+  { title: "Driver/customer support", icon: Headphones },
+  { title: "Secure app experience", icon: ShieldCheck },
 ];
 
 const testimonials = [
   {
-    name: "Sagar Patil",
-    city: "Pune",
-    text: "Sinhagad Road se office ride ke liye Bike Taxi use kiya. App smooth hai aur ride quickly mil gayi.",
+    text: "RYDAP app se auto booking simple ho gaya. Pune local travel ke liye useful hai.",
+    name: "Amit",
+    area: "Kothrud",
   },
   {
-    name: "Neha Sharma",
-    city: "Pune",
-    text: "Parcel delivery business ke liye kaafi useful laga. Local shipments manage karna easy ho gaya.",
+    text: "Office commute ke liye bike taxi fast milti hai. App clean aur tracking clear hai.",
+    name: "Priya",
+    area: "Hinjewadi",
   },
   {
-    name: "Rahul Deshmukh",
-    city: "Pune",
-    text: "Moving service ka experience simple tha. App se details samajh aaye aur local shifting mein help mili.",
+    text: "Local parcel movement ke liye RYDAP practical option lagla. Pune business sathi helpful.",
+    name: "Sagar",
+    area: "Baner",
   },
 ];
 
 const faqs = [
   {
-    q: "Kya website se booking kar sakte hain?",
-    a: "Nahi. Booking sirf RYDAP mobile app se hoti hai. Website par aap services, brand info, partner opportunities aur app download options dekh sakte hain.",
+    q: "Can I book a ride from the website?",
+    a: "No. Ride booking is available only through the RYDAP mobile app. Website pe services explore karein aur app download karein.",
   },
   {
-    q: "RYDAP app kaise download karein?",
-    a: "Homepage par diye gaye Download App button ya QR code ke through app download kara.",
+    q: "Is RYDAP available in Pune?",
+    a: "Yes. RYDAP is Pune-first and Maharashtra-based, with expansion planned for more Maharashtra markets.",
   },
   {
-    q: "RYDAP kis city ka brand hai?",
-    a: "RYDAP Pune-based, Maharashtra-operated homegrown mobility brand hai.",
+    q: "Which services are available?",
+    a: "Bike taxi, auto, cab, rentals, delivery, and outstation services are shown on the app depending on availability.",
   },
   {
-    q: "Kya RYDAP Marathi-based company hai?",
-    a: "Haan. RYDAP Maharashtra-based aur Marathi-operated company hai, jo local mobility needs ko dhyan mein rakhkar build ki gayi hai.",
+    q: "Can drivers join RYDAP?",
+    a: "Yes. Drivers can register through the Become a Driver CTA or contact flow. The team will guide onboarding.",
   },
   {
-    q: "Kya RYDAP abhi Pune mein available hai?",
-    a: "RYDAP Pune-focused platform hai. Expansion updates app aur website par share kiye jayenge.",
-  },
-  {
-    q: "Driver ya partner kaise join karein?",
-    a: "Join as Partner button use kara. Team onboarding ke liye contact karegi.",
+    q: "Is the app required?",
+    a: "Yes. Customers need the RYDAP app to book rides, track trips and manage ride history.",
   },
 ];
 
-const serviceIcons: Record<string, LucideIcon> = {
-  "bike-taxi": Bike,
-  "auto-rickshaw": Truck,
-  cab: Car,
-  "premium-cab": Crown,
-  "parcel-delivery": Package,
-  "moving-services": Truck,
-  "movers-packers": Boxes,
-  ambulance: Ambulance,
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: "easeOut" } },
+};
+
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
 };
 
 function StoreBadge({ type }: { type: "play" | "app" }) {
   const image = type === "play" ? googlePlayBadge : appStoreBadge;
+  const href = type === "play" ? appLinks.customerAndroid : appLinks.customerIos;
   const label = type === "play" ? "Get it on Google Play" : "Download on the App Store";
 
   return (
-    <a className="store-badge" href={type === "play" ? appLinks.customerAndroid : appLinks.customerIos} aria-label={label}>
-      <img src={image} alt={label} />
+    <a className="r-store-badge" href={href} aria-label={label}>
+      <img src={image} alt={label} loading="lazy" />
     </a>
   );
 }
 
-function SectionTitle({ eyebrow, title, className = "" }: { eyebrow?: string; title: string; className?: string }) {
+function SectionBadge({ children }: { children: string }) {
   return (
-    <div className={`reference-section-title ${className}`}>
-      {eyebrow ? <span>{eyebrow}</span> : null}
-      <h2>{title}</h2>
+    <span className="r-section-badge">
+      <span />
+      {children}
+    </span>
+  );
+}
+
+function PrimaryButton({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a className="r-btn r-btn-primary" href={href}>
+      {children}
+      <span>
+        <ArrowRight />
+      </span>
+    </a>
+  );
+}
+
+function SecondaryButton({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a className="r-btn r-btn-secondary" href={href}>
+      {children}
+      <span>
+        <ArrowRight />
+      </span>
+    </a>
+  );
+}
+
+function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <header className="r-header">
+      <a className="r-logo" href="#home" aria-label="RYDAP home">
+        <img src={logoLight} alt="RYDAP" />
+      </a>
+
+      <nav className="r-nav" aria-label="Primary navigation">
+        {navItems.map((item) => (
+          <a href={item.href} key={item.label}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      <div className="r-header-actions">
+        <a className="r-header-partner" href={appLinks.partnerSignup}>
+          Become a Driver
+        </a>
+        <a className="r-header-download" href={appLinks.customerAndroid}>
+          Download App
+          <Download />
+        </a>
+      </div>
+
+      <button className="r-menu-button" aria-label="Open menu" onClick={() => setMenuOpen((value) => !value)}>
+        <Menu />
+      </button>
+
+      <AnimatePresence>
+        {menuOpen ? (
+          <motion.nav
+            className="r-mobile-menu"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            aria-label="Mobile navigation"
+          >
+            {navItems.map((item) => (
+              <a href={item.href} key={item.label} onClick={() => setMenuOpen(false)}>
+                {item.label}
+              </a>
+            ))}
+            <a href={appLinks.partnerSignup} onClick={() => setMenuOpen(false)}>
+              Become a Driver
+            </a>
+          </motion.nav>
+        ) : null}
+      </AnimatePresence>
+    </header>
+  );
+}
+
+function HeroSection() {
+  return (
+    <section className="r-section r-hero" id="home">
+      <Header />
+      <div className="r-hero-orb r-hero-orb-one" />
+      <div className="r-hero-orb r-hero-orb-two" />
+
+      <div className="r-container r-hero-grid">
+        <motion.div className="r-hero-copy" initial="hidden" animate="show" variants={stagger}>
+          <motion.div className="r-local-badge" variants={fadeUp}>
+            <MapPin />
+            Made for Pune • Built in Maharashtra
+          </motion.div>
+
+          <motion.h1 variants={fadeUp}>
+            Pune ka <span>Homegrown</span> Mobility App
+          </motion.h1>
+
+          <motion.p className="r-hero-line" variants={fadeUp}>
+            Auto, Cab, Bike Taxi - Sab Ek App Mein
+          </motion.p>
+
+          <motion.p className="r-hero-text" variants={fadeUp}>
+            RYDAP is a Maharashtra-based mobility platform built for fast, safe, and affordable local rides.
+          </motion.p>
+
+          <motion.div className="r-hero-actions" variants={fadeUp}>
+            <PrimaryButton href={appLinks.customerAndroid}>Download App</PrimaryButton>
+            <SecondaryButton href={appLinks.partnerSignup}>Become a Driver</SecondaryButton>
+          </motion.div>
+
+          <motion.div className="r-booking-note" variants={fadeUp}>
+            <ShieldCheck />
+            Website pe booking nahi hoti - ride book karne ke liye app download karein.
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="r-hero-visual"
+          initial={{ opacity: 0, scale: 0.96, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="r-hero-visual-shell">
+            <img className="r-hero-phone" src={asset("hero-phone-mockup.png")} alt="RYDAP app phone mockup" />
+            <img className="r-hero-auto" src={asset("hero-auto.png")} alt="RYDAP auto rickshaw service" />
+            <img className="r-hero-cab" src={asset("hero-cab.png")} alt="RYDAP cab service in Pune" />
+            <img className="r-hero-bike" src={asset("hero-bike.png")} alt="RYDAP bike taxi service" />
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function ServiceGrid() {
+  return (
+    <section className="r-section r-services" id="services">
+      <div className="r-container">
+        <motion.div className="r-section-head r-split-head" initial="hidden" whileInView="show" viewport={{ once: true, margin: "-120px" }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>Services</SectionBadge>
+            <h2>All Your Everyday Rides, One RYDAP App Mein</h2>
+            <p>Rozcha travel easy kara - bike, auto, cab, delivery aur outstation rides.</p>
+          </motion.div>
+          <motion.div variants={fadeUp}>
+            <PrimaryButton href={appLinks.customerAndroid}>Download App</PrimaryButton>
+          </motion.div>
+        </motion.div>
+
+        <motion.div className="r-service-grid" initial="hidden" whileInView="show" viewport={{ once: true, margin: "-120px" }} variants={stagger}>
+          {services.map((service) => {
+            const Icon = service.icon;
+            return (
+              <motion.a
+                variants={fadeUp}
+                whileHover={{ y: -8 }}
+                className={`r-service-card ${service.featured ? "is-featured" : ""}`}
+                href={appLinks.customerAndroid}
+                key={service.title}
+              >
+                <div className="r-service-media">
+                  <img src={service.image} alt={`RYDAP ${service.title} service`} loading="lazy" />
+                  <span className="r-service-icon">
+                    <Icon />
+                  </span>
+                </div>
+                <div className="r-service-body">
+                  <span>Available on App</span>
+                  <h3>{service.title}</h3>
+                  <p>{service.copy}</p>
+                </div>
+              </motion.a>
+            );
+          })}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function WhyRydap() {
+  return (
+    <section className="r-section r-why" id="why-rydap">
+      <div className="r-container">
+        <motion.div className="r-section-head r-centered-head" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>Local Trust</SectionBadge>
+            <h2>RYDAP kyu choose kare?</h2>
+            <p>Pune-first mobility brand, local drivers, app-based booking ani support ekach platform madhye.</p>
+          </motion.div>
+        </motion.div>
+
+        <motion.div className="r-stat-row" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          {["Pune-first", "Verified Drivers", "App-based Booking", "Local Support"].map((stat) => (
+            <motion.div className="r-stat-card" variants={fadeUp} key={stat}>
+              {stat}
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div className="r-benefit-grid" initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} variants={stagger}>
+          {whyCards.map((item) => {
+            const Icon = item.icon;
+            return (
+              <motion.article className="r-benefit-card" variants={fadeUp} whileHover={{ y: -6 }} key={item.title}>
+                <Icon />
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </motion.article>
+            );
+          })}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function AppDownloadSection() {
+  return (
+    <section className="r-section r-download-section">
+      <div className="r-container">
+        <motion.div className="r-download-panel" initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} variants={stagger}>
+          <motion.div className="r-download-copy" variants={fadeUp}>
+            <SectionBadge>Book on App</SectionBadge>
+            <h2>Ride book karna hai? App download karo.</h2>
+            <p>RYDAP website par direct booking nahi hoti. Booking ke liye mobile app install karein.</p>
+            <div className="r-download-bullets">
+              {downloadBullets.map((item) => (
+                <span key={item}>
+                  <CheckCircle2 />
+                  {item}
+                </span>
+              ))}
+            </div>
+            <div className="r-store-row">
+              <StoreBadge type="play" />
+              <StoreBadge type="app" />
+              <img className="r-qr" src={asset("qr-placeholder.png")} alt="RYDAP app download QR placeholder" loading="lazy" />
+            </div>
+          </motion.div>
+
+          <motion.div className="r-download-visual" variants={fadeUp}>
+            <img src={asset("app-download-phone.png")} alt="RYDAP app booking screen" loading="lazy" />
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function DriverPartnerSection() {
+  return (
+    <section className="r-section r-driver" id="drivers">
+      <div className="r-container r-driver-grid">
+        <motion.div className="r-driver-copy" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>For Drivers</SectionBadge>
+            <h2>Driver ho? RYDAP ke saath kamaai start karo.</h2>
+            <p>Auto, bike taxi, cab aur local delivery partners ke liye simple onboarding.</p>
+            <PrimaryButton href={appLinks.partnerSignup}>Become a Driver</PrimaryButton>
+          </motion.div>
+        </motion.div>
+
+        <motion.div className="r-driver-panel" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.img variants={fadeUp} src={asset("driver-partner.png")} alt="RYDAP driver partner onboarding" loading="lazy" />
+          <div className="r-driver-timeline">
+            {driverSteps.map((step) => {
+              const Icon = step.icon;
+              return (
+                <motion.article className="r-driver-step" variants={fadeUp} key={step.title}>
+                  <span>
+                    <Icon />
+                  </span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function CoverageAreas() {
+  return (
+    <section className="r-section r-coverage">
+      <div className="r-container">
+        <motion.div className="r-section-head r-centered-head" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>Coverage</SectionBadge>
+            <h2>Pune se shuru, Maharashtra ke liye.</h2>
+            <p>Local routes, daily commute zones aur expansion markets - RYDAP grows with Maharashtra.</p>
+          </motion.div>
+        </motion.div>
+        <motion.div className="r-area-grid" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          {areas.map((area) => (
+            <motion.span variants={fadeUp} whileHover={{ y: -4, scale: 1.02 }} key={area}>
+              <MapPin />
+              {area}
+            </motion.span>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function TrustSafetySection() {
+  return (
+    <section className="r-section r-safety" id="safety">
+      <div className="r-container r-safety-grid">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>Safety</SectionBadge>
+            <h2>Safe rides. Local trust.</h2>
+            <p>Verified local partners, transparent ride details and app-led support keep the ride experience simple and dependable.</p>
+          </motion.div>
+        </motion.div>
+        <motion.div className="r-safety-list" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          {safetyItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <motion.article variants={fadeUp} key={item.title}>
+                <Icon />
+                <span>{item.title}</span>
+              </motion.article>
+            );
+          })}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  return (
+    <section className="r-section r-testimonials">
+      <div className="r-container">
+        <motion.div className="r-section-head r-centered-head" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>Testimonials</SectionBadge>
+            <h2>What Pune customers say</h2>
+          </motion.div>
+        </motion.div>
+        <motion.div className="r-testimonial-grid" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          {testimonials.map((item) => (
+            <motion.article className="r-testimonial-card" variants={fadeUp} key={item.name}>
+              <div className="r-stars">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Star key={index} />
+                ))}
+              </div>
+              <p>{item.text}</p>
+              <strong>
+                {item.name}, {item.area}
+              </strong>
+            </motion.article>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function FAQSection() {
+  const [open, setOpen] = useState(0);
+
+  return (
+    <section className="r-section r-faq" id="faq">
+      <div className="r-container r-faq-grid">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>FAQ</SectionBadge>
+            <h2>Clear answers before you download.</h2>
+            <p>No website booking confusion. RYDAP is built around the mobile app experience.</p>
+          </motion.div>
+        </motion.div>
+
+        <div className="r-faq-list">
+          {faqs.map((faq, index) => (
+            <article className={`r-faq-item ${open === index ? "is-open" : ""}`} key={faq.q}>
+              <button onClick={() => setOpen(open === index ? -1 : index)} aria-expanded={open === index}>
+                {faq.q}
+                <ChevronDown />
+              </button>
+              <AnimatePresence initial={false}>
+                {open === index ? (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}>
+                    <p>{faq.a}</p>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FooterCTA() {
+  return (
+    <footer className="r-footer" id="contact">
+      <div className="r-container r-footer-grid">
+        <div className="r-footer-brand">
+          <img src={logoLight} alt="RYDAP" loading="lazy" />
+          <p>RYDAP is a Pune-born, Maharashtra-based mobility platform built for local rides, drivers, and daily travel.</p>
+          <div className="r-store-row">
+            <StoreBadge type="play" />
+            <StoreBadge type="app" />
+          </div>
+        </div>
+        <FooterColumn title="Company" links={["Home", "Services", "Why RYDAP", "Safety", "FAQ"]} />
+        <FooterColumn title="Services" links={services.map((item) => item.title)} />
+        <div className="r-footer-column">
+          <h3>Contact</h3>
+          <a href="mailto:support@rydap.in">support@rydap.in</a>
+          <a href="tel:+910000000000">+91 00000 00000</a>
+          <span>Pune, Maharashtra</span>
+          <div className="r-socials">
+            <Facebook />
+            <Instagram />
+            <Navigation />
+          </div>
+        </div>
+      </div>
+      <div className="r-container r-footer-bottom">
+        <span>© 2026 RYDAP. All rights reserved.</span>
+        <span>Maharashtra-based brand • Booking only on app</span>
+      </div>
+    </footer>
+  );
+}
+
+function FooterColumn({ title, links }: { title: string; links: string[] }) {
+  return (
+    <div className="r-footer-column">
+      <h3>{title}</h3>
+      {links.map((link) => (
+        <a href={link === "Home" ? "#home" : link === "FAQ" ? "#faq" : "#services"} key={link}>
+          {link}
+        </a>
+      ))}
     </div>
+  );
+}
+
+function MobileDownloadCTA() {
+  return (
+    <a className="r-mobile-download" href={appLinks.customerAndroid}>
+      Download RYDAP App
+      <Download />
+    </a>
   );
 }
 
 export default function Home() {
   return (
-    <main className="reference-page">
-      <header className="reference-header">
-        <a className="reference-logo" href="#home" aria-label="Rydap home">
-          <img src={logoLight} alt="Rydap" />
-        </a>
-
-        <nav className="desktop-nav" aria-label="Primary navigation">
-          {navItems.map((item, index) => (
-            <a className={index === 0 ? "active" : ""} href={`#${item.toLowerCase().replaceAll(" ", "-")}`} key={item}>
-              {item}
-            </a>
-          ))}
-        </nav>
-
-        <a className="download-nav" href={appLinks.customerAndroid}>
-          Download App <Download />
-        </a>
-
-        <button className="mobile-menu-button" aria-label="Open menu">
-          <Menu />
-        </button>
-      </header>
-
-      <section className="reference-hero" id="home">
-        <img className="hero-skyline" src={citySkyline} alt="" aria-hidden="true" />
-        <img className="hero-routes" src={routeLines} alt="" aria-hidden="true" />
-
-        <div className="reference-container hero-grid">
-          <div className="hero-copy">
-            <div className="city-pill">
-              <MapPin />
-              Homegrown in Pune
-              <ChevronDown />
-            </div>
-
-            <h1>
-              Pune Ka <span>Homegrown</span> Mobility App
-            </h1>
-
-            <p>
-              <strong>Rides, Parcels, Moving & Emergency Support - Sab Ek App Madhye.</strong>
-            </p>
-
-            <div className="hero-actions">
-              <a className="primary-action" href={appLinks.customerAndroid}>
-                Download Customer App <Download />
-              </a>
-              <a className="secondary-action" href={appLinks.partnerSignup}>
-                Join as Partner <User />
-              </a>
-            </div>
-
-            <div className="hero-download-card">
-              <h3>Booking App Varach Hote</h3>
-              <p>Website var services explore kara, app download kara, ani actual booking mobile app madhun complete kara.</p>
-              <div className="app-download-row">
-                <StoreBadge type="play" />
-                <StoreBadge type="app" />
-                <div className="qr-download">
-                  <img src={qrPlaceholder} alt="Rydap QR code placeholder" />
-                  <span>App release status nusar availability.</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="hero-trust-row">
-              {trustItems.map((item) => (
-                <span key={item}>
-                  <Check />
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="hero-visual">
-            <div className="pin-marker">
-              <MapPin />
-            </div>
-            <img className="hero-auto" src={heroAuto} alt="Rydap auto rickshaw" />
-            <img className="hero-cab" src={heroCab} alt="Rydap cab" />
-            <img className="hero-phone" src={heroPhone} alt="Rydap app phone mockup" />
-          </div>
-        </div>
-      </section>
-
-      <section className="services-section" id="services">
-        <div className="reference-container">
-          <div className="services-header-row">
-            <div className="services-heading">
-              <span className="services-pill">
-                <span />
-                Our Services
-              </span>
-              <h2>
-                All Your Everyday Needs,
-                <br />
-                Delivered With <em>Care</em>
-              </h2>
-            </div>
-            <a className="services-view-all" href={appLinks.customerAndroid}>
-              Download App
-              <span>
-                <ArrowRight />
-              </span>
-            </a>
-          </div>
-
-          <div className="service-grid">
-            {services.map((service) => {
-              const Icon = serviceIcons[service.slug];
-              const appFirst = service.slug === "bike-taxi" || service.slug === "auto-rickshaw" || service.slug === "cab" || service.slug === "premium-cab";
-              return (
-                <a
-                  className={`service-card ${service.slug === "auto-rickshaw" ? "featured" : ""}`}
-                  href={appLinks.customerAndroid}
-                  key={service.title}
-                >
-                  <span className="service-card-media">
-                    <img src={service.image} alt={service.title} />
-                    <span className="service-icon-badge">
-                      <Icon />
-                    </span>
-                    {service.slug === "auto-rickshaw" ? <span className="featured-star">*</span> : null}
-                  </span>
-                  <span className="service-card-content">
-                    <span className="service-card-kicker">RYDAP Service</span>
-                    <h3>{service.title}</h3>
-                    <p>{service.text}</p>
-                    <span className="service-card-footer">
-                      {appFirst ? "App Mein Dekhein" : "Download App"}
-                      <span>
-                        <ArrowRight />
-                      </span>
-                    </span>
-                  </span>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="local-trust-section">
-        <div className="reference-container local-trust-panel">
-          <div className="local-trust-copy">
-            <span>Built In Pune. Made For Maharashtra.</span>
-            <h2>Aaplya Maharashtra Sathi Local Mobility Brand</h2>
-            <p>
-              RYDAP ek local, Maharashtra-rooted brand hai jo rides, parcels, moving aur
-              emergency transport ko smart app experience mein laata hai. Website var brand ani
-              services samjun ghya; actual booking mobile app madhun complete kara.
-            </p>
-            <a className="primary-action" href={appLinks.customerAndroid}>
-              Download RYDAP App <Download />
-            </a>
-          </div>
-
-          <div className="local-trust-grid">
-            {localTrust.map((item) => (
-              <article className="local-trust-card" key={item.title}>
-                <div>
-                  <img src={item.image} alt={item.title} />
-                </div>
-                <strong>{item.title}</strong>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="how-section" id="how-it-works">
-        <div className="reference-container">
-          <SectionTitle eyebrow="How It Works" title="RYDAP Kasa Kaam Karta?" className="center-title" />
-          <div className="steps-grid">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div className="step-card" key={step.title}>
-                  <div className="step-number">{String(index + 1).padStart(2, "0")}</div>
-                  <div className="step-line" />
-                  <Icon />
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="app-download-section">
-        <div className="reference-container app-download-card">
-          <div className="app-copy">
-            <h2>Sab Kuch <span>App Madhye</span></h2>
-            <p>Website var RYDAP samjun ghya. Booking, tracking, service management ani support sathi app download kara.</p>
-            <ul>
-              {appFeatures.map((feature) => (
-                <li key={feature}>
-                  <Check />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <div className="app-download-row">
-              <StoreBadge type="play" />
-              <StoreBadge type="app" />
-              <div className="qr-download">
-                <img src={qrPlaceholder} alt="Rydap QR code placeholder" />
-                <span>Scan to Download</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="app-phone-stack">
-            <div className="flow-lines" />
-            <img className="app-phone-one" src={appScreenHome} alt="Rydap app home screen" />
-            <img className="app-phone-two" src={appScreenMap} alt="Rydap app live tracking screen" />
-          </div>
-        </div>
-      </section>
-
-      <section className="why-card-section">
-        <div className="reference-container">
-          <div className="why-panel">
-            <span>RYDAP Ka / Kaay Choose Kara?</span>
-            <h2>Local Seva, Smart Technology</h2>
-            <p className="why-panel-copy">RYDAP ek local brand aahe jo Pune ani Maharashtra users sathi rides, parcel, moving ani emergency services la ekach app madhye simple banavto.</p>
-            <div className="why-grid">
-              {whyItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div className="why-item" key={item.title}>
-                    <Icon />
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="partners-section" id="for-partners">
-        <div className="reference-container partner-grid">
-          <div className="partner-heading">
-            <span>RYDAP Sobat Earn Kara</span>
-            <p>Driver, delivery partner, moving partner kiwa ambulance partner banna hai? Local Maharashtra network ka part bano.</p>
-          </div>
-
-          {partners.map((partner) => {
-            const Icon = partner.icon;
-            return (
-              <article className="partner-card" key={partner.title}>
-                <Icon />
-                <div>
-                  <h3>{partner.title}</h3>
-                  <p>{partner.text}</p>
-                  <a href={appLinks.partnerSignup}>
-                    {partner.cta} <ArrowRight />
-                  </a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="safety-section" id="safety">
-        <div className="reference-container safety-panel">
-          <div>
-            <span>Safety Ani Bharosa First</span>
-            <h2>Verified Local Network, Transparent App Experience</h2>
-            <p>RYDAP madhye verified partners, live tracking, support-first approach ani transparent service details mule har experience zasta safe ani reliable banto.</p>
-          </div>
-          <div className="safety-grid">
-            {safetyItems.map((item) => (
-              <div key={item}>
-                <ShieldCheck />
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="testimonials-section">
-        <div className="reference-container">
-          <h2>What Pune Customers Say</h2>
-          <div className="testimonial-grid">
-            {testimonials.map((testimonial) => (
-              <article className="testimonial-card" key={testimonial.name}>
-                <div className="stars">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={index} />
-                  ))}
-                </div>
-                <p>{testimonial.text}</p>
-                <div className="customer">
-                  <div>{testimonial.name.charAt(0)}</div>
-                  <span>
-                    <strong>{testimonial.name}</strong>
-                    {testimonial.city}
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="faq-section" id="faq">
-        <div className="reference-container">
-          <div className="faq-header">
-            <h2>Frequently Asked Questions</h2>
-            <a href={appLinks.customerAndroid}>Download App <ArrowRight /></a>
-          </div>
-          <div className="faq-grid">
-            {faqs.map((faq) => (
-              <details key={faq.q}>
-                <summary>
-                  {faq.q}
-                  <ChevronDown />
-                </summary>
-                <p>{faq.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <footer className="reference-footer" id="contact">
-        <div className="reference-container footer-grid">
-          <div>
-            <img src={logoLight} alt="Rydap" />
-            <p>RYDAP Pune ka homegrown, Maharashtra-based, Marathi-operated mobility app hai. Rides, parcels, moving services ani emergency support sathi trusted local platform. Booking sathi app download kara.</p>
-            <div className="social-row">
-              <Facebook />
-              <Instagram />
-              <Building2 />
-              <Navigation />
-            </div>
-          </div>
-
-          <div>
-            <h3>Services</h3>
-            {services.map((service) => (
-              <a href={appLinks.customerAndroid} key={service.slug}>{service.title}</a>
-            ))}
-          </div>
-
-          <div>
-            <h3>Company</h3>
-            <a href="#home">Homegrown in Pune</a>
-            <a href="#for-partners">Partner Network</a>
-            <a href="#safety">Safety</a>
-            <a href="#faq">FAQ</a>
-            <a href="#contact">Terms</a>
-            <a href="#contact">Privacy Policy</a>
-          </div>
-
-          <div id="cities">
-            <h3>Contact</h3>
-            <a href="#cities">Pune, Maharashtra</a>
-            <a href="mailto:support@rydap.in">support@rydap.in</a>
-            <a href="tel:+910000000000">+91 00000 00000</a>
-            <a href="#cities">Mumbai, Nashik, Nagpur coming soon</a>
-          </div>
-
-          <div>
-            <h3>Download App</h3>
-            <StoreBadge type="play" />
-            <StoreBadge type="app" />
-          </div>
-        </div>
-        <div className="footer-bottom reference-container">
-          <span>(c) 2026 RYDAP. All rights reserved.</span>
-          <span>Maharashtra-based | Marathi-operated</span>
-        </div>
-      </footer>
-
-      <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
-        <a href="#home"><HomeIcon />Home</a>
-        <a href="#services"><Boxes />Services</a>
-        <a href="#how-it-works"><Clock3 />How</a>
-        <a href="#contact"><User />Contact</a>
-      </nav>
-      <a className="mobile-floating-download" href={appLinks.customerAndroid}>
-        Download RYDAP App <Download />
-      </a>
+    <main className="rydap-home">
+      <HeroSection />
+      <ServiceGrid />
+      <WhyRydap />
+      <AppDownloadSection />
+      <DriverPartnerSection />
+      <CoverageAreas />
+      <TrustSafetySection />
+      <TestimonialsSection />
+      <FAQSection />
+      <FooterCTA />
+      <MobileDownloadCTA />
     </main>
   );
 }
