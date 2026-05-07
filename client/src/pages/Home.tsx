@@ -31,6 +31,7 @@ import { appLinks } from "@/lib/appLinks";
 import appStoreBadge from "@/images/generated/app store.png";
 import googlePlayBadge from "@/images/generated/google play.png";
 import logoLight from "@/images/web lite logo.png";
+import { services as serviceCatalog } from "@/data/services";
 
 const asset = (file: string) => `/assets/rydap/placeholders/${file}`;
 
@@ -348,9 +349,11 @@ function HeroSection() {
         >
           <div className="r-hero-visual-shell">
             <img className="r-hero-phone" src={asset("hero-phone-mockup.png")} alt="RYDAP app phone mockup" />
-            <img className="r-hero-auto" src={asset("hero-auto.png")} alt="RYDAP auto rickshaw service" />
-            <img className="r-hero-cab" src={asset("hero-cab.png")} alt="RYDAP cab service in Pune" />
-            <img className="r-hero-bike" src={asset("hero-bike.png")} alt="RYDAP bike taxi service" />
+            <div className="r-hero-service-cloud" aria-label="RYDAP services">
+              {serviceCatalog.map((service) => (
+                <img key={service.slug} src={service.image} alt={`RYDAP ${service.title} service`} />
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>

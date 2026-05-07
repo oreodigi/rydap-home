@@ -362,7 +362,7 @@
 
   .r-hero-phone {
     position: absolute;
-    z-index: 3;
+    z-index: 8;
     top: 5%;
     left: 31%;
     width: 42%;
@@ -372,35 +372,81 @@
     animation: r-float 5.5s ease-in-out infinite;
   }
 
-  .r-hero-auto {
+  .r-hero-service-cloud {
     position: absolute;
-    z-index: 4;
-    right: 48%;
-    bottom: 7%;
-    width: 37%;
-    filter: drop-shadow(0 24px 28px rgba(0, 0, 0, 0.28));
-    animation: r-float 6.4s ease-in-out infinite reverse;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
   }
 
-  .r-hero-cab {
+  .r-hero-service-cloud img {
     position: absolute;
-    z-index: 2;
-    right: 5%;
-    bottom: 8%;
-    width: 43%;
-    filter: drop-shadow(0 24px 32px rgba(0, 0, 0, 0.28));
+    width: 24%;
+    max-height: 170px;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 28px rgba(0, 0, 0, 0.28));
+    animation: r-float 6.4s ease-in-out infinite;
+  }
+
+  .r-hero-service-cloud img:nth-child(1) {
+    top: 11%;
+    right: 2%;
+    width: 20%;
+    animation-delay: -0.6s;
+  }
+
+  .r-hero-service-cloud img:nth-child(2) {
+    right: 49%;
+    bottom: 6%;
+    width: 36%;
+    z-index: 7;
+    animation-direction: reverse;
+  }
+
+  .r-hero-service-cloud img:nth-child(3) {
+    right: 0;
+    bottom: 7%;
+    width: 41%;
+    animation-delay: -1.4s;
+  }
+
+  .r-hero-service-cloud img:nth-child(4) {
+    top: 42%;
+    right: -4%;
+    width: 30%;
+    animation-delay: -2.2s;
+    animation-direction: reverse;
+  }
+
+  .r-hero-service-cloud img:nth-child(5) {
+    top: 36%;
+    left: 4%;
+    width: 24%;
+    animation-delay: -1s;
+  }
+
+  .r-hero-service-cloud img:nth-child(6) {
+    top: 4%;
+    left: 11%;
+    width: 32%;
+    opacity: 0.94;
     animation: r-float 7.2s ease-in-out infinite;
   }
 
-  .r-hero-bike {
-    position: absolute;
-    z-index: 1;
-    top: 11%;
-    right: 0;
-    width: 24%;
+  .r-hero-service-cloud img:nth-child(7) {
+    bottom: 0;
+    left: 14%;
+    width: 34%;
+    animation-delay: -2.8s;
+    animation-direction: reverse;
+  }
+
+  .r-hero-service-cloud img:nth-child(8) {
+    top: 18%;
+    left: 0;
+    width: 28%;
     opacity: 0.96;
-    filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.24));
-    animation: r-float 6.8s ease-in-out infinite reverse;
+    animation-delay: -3.4s;
   }
 
   .r-services,
@@ -1376,20 +1422,56 @@
       width: 44%;
     }
 
-    .r-hero-auto {
-      right: 45%;
-      bottom: 7%;
-      width: 40%;
+    .r-hero-service-cloud img {
+      max-height: 120px;
     }
 
-    .r-hero-cab {
+    .r-hero-service-cloud img:nth-child(1) {
+      top: 5%;
+      right: 2%;
+      width: 23%;
+    }
+
+    .r-hero-service-cloud img:nth-child(2) {
+      right: 48%;
+      bottom: 8%;
+      width: 38%;
+    }
+
+    .r-hero-service-cloud img:nth-child(3) {
       right: 0;
-      width: 48%;
+      bottom: 10%;
+      width: 44%;
     }
 
-    .r-hero-bike {
-      top: 4%;
+    .r-hero-service-cloud img:nth-child(4) {
+      top: 41%;
+      right: -6%;
+      width: 31%;
+    }
+
+    .r-hero-service-cloud img:nth-child(5) {
+      top: 38%;
+      left: 0;
       width: 27%;
+    }
+
+    .r-hero-service-cloud img:nth-child(6) {
+      top: 1%;
+      left: 8%;
+      width: 34%;
+    }
+
+    .r-hero-service-cloud img:nth-child(7) {
+      bottom: 0;
+      left: 12%;
+      width: 35%;
+    }
+
+    .r-hero-service-cloud img:nth-child(8) {
+      top: 17%;
+      left: -3%;
+      width: 28%;
     }
 
     .r-service-grid,
