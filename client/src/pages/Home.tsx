@@ -351,7 +351,12 @@ function HeroSection() {
             <img className="r-hero-phone" src={asset("hero-phone-mockup.png")} alt="RYDAP app phone mockup" />
             <div className="r-hero-service-cloud" aria-label="RYDAP services">
               {serviceCatalog.map((service) => (
-                <img key={service.slug} src={service.image} alt={`RYDAP ${service.title} service`} />
+                <figure className="r-hero-service-card" key={service.slug}>
+                  <span className="r-hero-service-image">
+                    <img src={service.image} alt={`RYDAP ${service.title} service`} />
+                  </span>
+                  <figcaption>{service.title}</figcaption>
+                </figure>
               ))}
             </div>
           </div>
