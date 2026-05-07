@@ -94,6 +94,38 @@ const whyCards = [
 
 const downloadBullets = ["Quick booking", "Live tracking", "Safe local rides"];
 
+const logisticsServices = [
+  {
+    title: "Parcel Delivery",
+    tag: "Two-wheeler local delivery",
+    text: "Documents, small boxes aur business parcels Pune ke andar app se dispatch kara.",
+    image: asset("parcel-box.png"),
+    icon: Package,
+  },
+  {
+    title: "Mini Truck & Tempo",
+    tag: "Goods movement",
+    text: "Shop stock, appliances, furniture ani bulky items ke liye local truck support.",
+    image: asset("parcel-truck.png"),
+    icon: Truck,
+    featured: true,
+  },
+  {
+    title: "Packers & Movers",
+    tag: "Managed shifting",
+    text: "Packing, loading, transport aur unloading support for home and office shifting.",
+    image: asset("packers-movers.png"),
+    icon: ShieldCheck,
+  },
+];
+
+const logisticsHighlights = [
+  "App-based request and tracking",
+  "Bike, mini truck and shifting partner options",
+  "Local Pune/Maharashtra partner network",
+  "Support for parcels, goods and full shifting",
+];
+
 const driverSteps = [
   { title: "Register", text: "Basic details submit kara.", icon: Phone },
   { title: "Verify Documents", text: "License, vehicle ani KYC check.", icon: ShieldCheck },
@@ -409,6 +441,71 @@ function WhyRydap() {
   );
 }
 
+function LogisticsMovingSection() {
+  return (
+    <section className="r-section r-logistics">
+      <div className="r-container">
+        <motion.div className="r-logistics-head" initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} variants={stagger}>
+          <motion.div variants={fadeUp}>
+            <SectionBadge>Parcels & Moving</SectionBadge>
+            <h2>Parcel bhejna ho ya ghar shift karna ho - RYDAP app madhye.</h2>
+            <p>
+              Porter-style instant delivery convenience aur packers-movers level managed shifting ko RYDAP local Pune network ke saath simple banata hai.
+              Website par rates ya booking form nahi - app download karke service request kara.
+            </p>
+          </motion.div>
+          <motion.div className="r-logistics-cta" variants={fadeUp}>
+            <PrimaryButton href={appLinks.customerAndroid}>Download App</PrimaryButton>
+            <SecondaryButton href={appLinks.partnerSignup}>Join Moving Network</SecondaryButton>
+          </motion.div>
+        </motion.div>
+
+        <motion.div className="r-logistics-grid" initial="hidden" whileInView="show" viewport={{ once: true, margin: "-120px" }} variants={stagger}>
+          {logisticsServices.map((service) => {
+            const Icon = service.icon;
+            return (
+              <motion.article className={`r-logistics-card ${service.featured ? "is-featured" : ""}`} variants={fadeUp} whileHover={{ y: -8 }} key={service.title}>
+                <div className="r-logistics-image">
+                  <img src={service.image} alt={`RYDAP ${service.title}`} loading="lazy" />
+                  <span>
+                    <Icon />
+                  </span>
+                </div>
+                <div>
+                  <small>{service.tag}</small>
+                  <h3>{service.title}</h3>
+                  <p>{service.text}</p>
+                </div>
+                <a href={appLinks.customerAndroid}>
+                  App Mein Dekhein
+                  <ArrowRight />
+                </a>
+              </motion.article>
+            );
+          })}
+        </motion.div>
+
+        <motion.div className="r-logistics-bottom" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div className="r-logistics-note" variants={fadeUp}>
+            <h3>Built for local businesses, homes ani daily movement.</h3>
+            <p>
+              Retail parcel, same-city goods movement, furniture shifting, office relocation and home shifting - all service discovery happens here, actual request app se hoti hai.
+            </p>
+          </motion.div>
+          <motion.div className="r-logistics-points" variants={stagger}>
+            {logisticsHighlights.map((item) => (
+              <motion.span variants={fadeUp} key={item}>
+                <CheckCircle2 />
+                {item}
+              </motion.span>
+            ))}
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 function AppDownloadSection() {
   return (
     <section className="r-section r-download-section">
@@ -657,6 +754,7 @@ export default function Home() {
     <main className="rydap-home">
       <HeroSection />
       <ServiceGrid />
+      <LogisticsMovingSection />
       <WhyRydap />
       <AppDownloadSection />
       <DriverPartnerSection />
